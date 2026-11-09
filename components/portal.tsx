@@ -41,7 +41,7 @@ export function Portal(){
   e.preventDefault();if(!modal)return;const f=new FormData(e.currentTarget),v:R=Object.fromEntries(f),r=modal.record;
   const money=(key:string)=>Math.round(Number(v[key]||0)*100);
   let path=modal.type;
-  if(path==='student'){path=r.id&&!r.enquiry_id?'students/update':'students';Object.assign(v,{id:r.id,enquiry_id:r.enquiry_id,plan_id:v.plan_id||null});}
+  if(path==='student'){path=r.id&&!r.enquiry_id?'students/update':'students';Object.assign(v,{id:r.id,parent_id:r.parent_id,enquiry_id:r.enquiry_id,plan_id:v.plan_id||null});}
   if(path==='crm'){Object.assign(v,{id:r.id,followup_date:v.followup_date||null,assigned_to:v.assigned_to||null});}
   if(path==='batch'){path=r.id?'batches/update':'batches';v.id=r.id;v.days=f.getAll('days');v.coach_id=v.coach_id||null;}
   if(path==='invoice'){path='invoices';v.amount=money('amount');v.discount=money('discount');}
