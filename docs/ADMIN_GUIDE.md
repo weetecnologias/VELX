@@ -1,5 +1,13 @@
 # VELX academy administrator guide
 
+## Public website navigation
+
+The public menu scrolls to sections of the full homepage: About, Programmes,
+Timetable, Coaches, Gallery, FAQs and Contact. The rest of the website stays
+available by scrolling, and the mobile menu closes after a selection. Old links
+such as `/about` redirect to `/#about`. Admission enquiries, enquiry tracking,
+privacy and the academy portal retain their dedicated routes or controls.
+
 ## First use
 
 Open `/portal` on the deployed site and sign in with the Site owner's authorised email. The bootstrap email is stored as the `BOOTSTRAP_ADMIN_EMAIL` secret in Sites. Only that authenticated identity can create the first Super Admin. Unknown accounts have no academy access.
