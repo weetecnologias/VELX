@@ -8,6 +8,13 @@ The deployed review URL is expected at `https://velx-taekwondo-academy.amulya-bh
 
 ## Required configuration
 
+Follow [Git workflow](GIT_WORKFLOW.md) before preparing a release. Each task has
+its own branch, tested changes integrate into `develop`, and production releases
+are promoted to `main`. The existing local branches do not create hosted
+development/production environments or enable automatic deployment. Future
+independent hosting must bind those environments to separate databases, storage,
+authentication settings and secrets.
+
 Optional password recovery configuration is described in
 [Password recovery](PASSWORD_RECOVERY.md). It requires a configured Supabase Auth
 project, custom SMTP, a recovery-specific email template and trusted HTTPS URLs.
