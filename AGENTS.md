@@ -166,6 +166,12 @@ neutral backgrounds. Preserve responsive layouts, keyboard access, visible focus
 form labels, validation feedback, loading/error states and print styles. Every
 interactive control must perform a real supported action.
 
+Public marketing navigation uses homepage anchors (`/#about`, `/#programmes`,
+`/#timetable`, `/#coaches`, `/#gallery`, `/#faqs`, `/#contact`). Keep all targets on
+the full homepage and close the mobile menu on selection. Legacy section URLs
+redirect to those anchors while preserving query parameters. Admission, enquiry
+tracking, privacy and academy portal routes remain separate functional pages.
+
 Use `public/velx-logo.png` without distorting or replacing the supplied logo.
 `public/training-hero.png` is generated concept imagery and must remain labelled
 as illustrative. See `docs/ASSETS.md` for provenance. Publish actual coach profiles,

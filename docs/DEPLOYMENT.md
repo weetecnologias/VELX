@@ -8,6 +8,13 @@ The deployed review URL is expected at `https://velx-taekwondo-academy.amulya-bh
 
 ## Required configuration
 
+The public marketing website is a single homepage with section anchors. Legacy
+marketing routes such as `/about` and `/contact` redirect to `/#about` and
+`/#contact`, preserving query parameters such as `utm_source`. Keep these redirects
+when configuring external hosting. The sitemap lists the homepage and admission
+page rather than the redirected marketing routes. `/track`, `/privacy` and
+`/portal` retain their existing functionality.
+
 Follow [Git workflow](GIT_WORKFLOW.md) before preparing a release. Each task has
 its own branch, tested changes integrate into `develop`, and production releases
 are promoted to `main`. The existing local branches do not create hosted
