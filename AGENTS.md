@@ -207,10 +207,13 @@ The user requires a separate branch for every future logical change. Follow
 [Git workflow](docs/GIT_WORKFLOW.md):
 
 - `main` is the production release baseline; `develop` integrates tested work.
-  Start ordinary tasks from `develop` on a new `codex/<short-topic>` branch before
-  editing. Use one branch per feature, fix or documentation task; related files
-  and commits belong together. Do not commit task edits directly on `main` or
-  `develop`.
+  Start ordinary tasks from `develop` on a new branch before editing. Use
+  `feature/<topic>` for new functionality, `fix/<topic>` for bug fixes,
+  `docs/<topic>` for documentation and `chore/<topic>` for maintenance. Use
+  `hotfix/<topic>` from `main` for urgent production fixes. These user-selected
+  prefixes replace the earlier `codex/` convention; preserve historical branches.
+  Use one branch per logical task; related files and commits belong together.
+  Do not commit task edits directly on `main` or `develop`.
 - Check the working tree first. Preserve unfinished work on its own branch; do
   not silently carry unrelated edits into a new task, stash them or discard them.
   Use a separate worktree when tasks need different checkouts at the same time.
