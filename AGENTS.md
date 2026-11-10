@@ -200,8 +200,35 @@ remaining limitations without claiming unimplemented features.
 
 This application is a nested Git repository. Confirm the current repository root
 before staging or committing, and keep unrelated parent-workspace artifacts out
-of the app repository. Use the `codex/` prefix for new branches unless instructed
-otherwise. Never overwrite user changes or reset history to simplify a release.
+of the app repository. Never overwrite user changes or reset history to simplify
+a release.
+
+The user requires a separate branch for every future logical change. Follow
+[Git workflow](docs/GIT_WORKFLOW.md):
+
+- `main` is the production release baseline; `develop` integrates tested work.
+  Start ordinary tasks from `develop` on a new `codex/<short-topic>` branch before
+  editing. Use one branch per feature, fix or documentation task; related files
+  and commits belong together. Do not commit task edits directly on `main` or
+  `develop`.
+- Check the working tree first. Preserve unfinished work on its own branch; do
+  not silently carry unrelated edits into a new task, stash them or discard them.
+  Use a separate worktree when tasks need different checkouts at the same time.
+- Commit the scoped change and relevant documentation after appropriate checks.
+  Keep credentials, generated files and test state out of commits. Report the
+  branch, commit, checks and any unfinished work.
+- Integrate completed task branches into `develop` with a merge that preserves
+  the branch history. With a configured GitHub repository, use pull requests and
+  required checks instead of direct pushes to the integration/release branches.
+  Keep task branches until their changes are integrated and available remotely.
+- Promote tested `develop` to `main` as a release task. An ordinary editing task
+  does not authorize a production deployment. For urgent production fixes, branch
+  from `main`, verify the fix and integrate it into both release and development
+  history.
+- Branches do not provision environments. Development and production hosting
+  must use separate databases, private storage, authentication settings and
+  secrets. Configure GitHub protections/CI and hosting only when those services
+  are actually connected; never report a documented plan as active enforcement.
 
 Keep secrets, `.env`/`.dev.vars` values, private backups, local database state,
 `node_modules`, generated builds, temporary files and deployment archives out of
