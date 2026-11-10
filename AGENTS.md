@@ -203,6 +203,12 @@ before staging or committing, and keep unrelated parent-workspace artifacts out
 of the app repository. Never overwrite user changes or reset history to simplify
 a release.
 
+The canonical GitHub repository is `weetecnologias/VELX`. The application's
+`origin` uses `https://github.com/weetecnologias/VELX.git` with the existing local
+GitHub credential manager. The equivalent SSH URL is
+`git@github.com:weetecnologias/VELX.git`; use it only when SSH authentication is
+configured. Preserve this remote when using separate Sites publication tooling.
+
 The user requires a separate branch for every future logical change. Follow
 [Git workflow](docs/GIT_WORKFLOW.md):
 

@@ -2,6 +2,10 @@
 
 Full-stack public website and private academy workspace built with TypeScript, React, Vinext, Cloudflare Workers, D1 and private R2 storage.
 
+Source repository: [weetecnologias/VELX](https://github.com/weetecnologias/VELX).
+The latest integrated work is on [`develop`](https://github.com/weetecnologias/VELX/tree/develop);
+`main` tracks the production release baseline.
+
 The implementation prioritises Phase 1: enquiries and conversion, admissions, Excel import, batches, attendance, fees, verified partial payments and receipts. Role-scoped coach, parent and student views, progress, examinations, announcements and reports are also included. Online gateways and automated WhatsApp delivery remain Phase 3 integration work.
 
 See [Setup and deployment](docs/DEPLOYMENT.md), [Admin guide](docs/ADMIN_GUIDE.md) and [Asset provenance](docs/ASSETS.md).

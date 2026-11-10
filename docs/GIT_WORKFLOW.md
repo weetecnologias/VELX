@@ -92,14 +92,26 @@ email/password sign-in remain separate implementation tasks.
 
 ## Remote setup and enforcement
 
-At initial setup there was no configured remote. Check `git remote -v` for the
-current state. These local commits are not a GitHub backup until pushed to a
-confirmed repository. Use the academy's intended private GitHub repository;
-preserve the existing history and do not replace an unrelated remote.
+The selected repository is [weetecnologias/VELX](https://github.com/weetecnologias/VELX),
+which was public when connected. The application remote is:
 
-When the repository is connected:
+```text
+origin https://github.com/weetecnologias/VELX.git
+```
 
-- Push `main`, `develop` and retained task branches to that repository.
+The user supplied the equivalent SSH URL, `git@github.com:weetecnologias/VELX.git`.
+This computer has an existing GitHub HTTPS login and no configured SSH key, so
+HTTPS is used to preserve and upload the complete local commit/branch history.
+At initial branch setup no remote was configured; that earlier local history is
+retained. The parent workspace repository remains separate.
+
+Check `git remote -v` and `git branch -vv` before syncing. A local commit is backed
+up only after its branch is pushed successfully. Push new task branches with
+upstream tracking and open pull requests into `develop`. Preserve the existing
+remote/history, and keep Sites review publication separate from GitHub sync.
+
+Remaining enforcement and hosting setup:
+
 - Add CI for pull requests to `develop` and `main`, running the checked-in install,
   typecheck, test and build commands on a supported Node runtime. Do not supply
   production credentials to ordinary pull-request jobs.
