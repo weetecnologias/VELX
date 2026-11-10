@@ -32,7 +32,7 @@ Only the Super Admin grants or revokes accounts in **Settings & access**. Grant 
 
 Coaches see only assigned batches and their students, attendance, progress and relevant announcements. They cannot access fees, exports, CRM, medical details, account administration or unrelated students. Parents see only linked children and their attendance, invoices and receipts. Student accounts see their own profile, attendance, timetable, progress, belt records and announcements. Add further children to an existing parent through **Coaches & parents → Link another child**, after confirming the guardian relationship. Revocation is checked on every subsequent API request.
 
-Authentication, password resets and sign-in sessions are managed by the Sites identity provider. There are no application passwords or fake login accounts. Local preview deliberately has simulated sign-in disabled. To end this application's session, use Sign out; to manage all provider sessions or reset a password, use the identity provider's account/security controls.
+Hosted authentication and sign-in sessions currently use the Sites identity provider. Local dummy accounts now have **Forgot password?**: enter the registered email, open the captured email in `/local-inbox`, follow the time-limited link and enter the new password twice. Sign in again afterwards; the role and linked children remain unchanged. Staff do not need to know or recover the password. The new password is never placed in the dummy credential listing. See `docs/PASSWORD_RECOVERY.md` for the local workflow and optional real email-service configuration. Independent production login/hosting remains a later task; the recovery adapter does not replace Sites sign-in by itself.
 
 ## Attendance
 

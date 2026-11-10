@@ -1,0 +1,10 @@
+import { prepareLocalTest } from './setup.mjs';
+const {credentials,dir}=prepareLocalTest();
+console.log('\nVELX LOCAL TEST ACCOUNTS (localhost only)');
+for(const a of credentials.accounts)console.log(`${a.role}: ${a.email}${a.passwordChanged?' (password changed by user)':''}`);
+console.log(`Initial local test password (unchanged accounts only): ${credentials.password}`);
+console.log(`Saved locally in ${dir}`);
+console.log('Open http://localhost:5173/local-login\n');
+process.env.VELX_LOCAL_TEST_AUTH='1';
+process.argv=[process.execPath,new URL('../run-framework.mjs',import.meta.url).pathname,'dev','--hostname','127.0.0.1','--port','5173'];
+await import('../run-framework.mjs');

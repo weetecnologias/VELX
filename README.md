@@ -6,6 +6,12 @@ The implementation prioritises Phase 1: enquiries and conversion, admissions, Ex
 
 See [Setup and deployment](docs/DEPLOYMENT.md), [Admin guide](docs/ADMIN_GUIDE.md) and [Asset provenance](docs/ASSETS.md).
 
+Forgot-password and reset-password pages are included. Local testing captures
+reset emails in a loopback-only inbox. The optional real recovery adapter needs
+authentication-provider configuration for the later independent deployment; see
+[Password recovery](docs/PASSWORD_RECOVERY.md). It preserves academy roles and
+linked student records and does not replace the current hosted sign-in.
+
 ```powershell
 npm run install:ci
 npm run typecheck
@@ -13,4 +19,4 @@ npm test
 npm run build
 ```
 
-Real authentication is supplied by Sites sign-in. No fake login, client-side record database or production test accounts are included. Local public preview is available through `npm run dev`; hosted authentication is required to enter the real portal. Private records are stored only in the cloud SQL database and private storage, with server-side access checks on each request.
+Hosted authentication is supplied by Sites sign-in. No client-side record database or production test accounts are included. Local public preview is available through `npm run dev`. To test all roles with password-checked dummy accounts and a separate local database, use `npm run dev:test` and follow [Local testing](docs/LOCAL_TESTING.md). Private records use SQL/private storage, with server-side access checks on each request.
