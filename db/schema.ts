@@ -31,3 +31,26 @@ export const auditLogs = sqliteTable('audit_logs', { id:id(), userId:text('user_
 export const settings = sqliteTable('settings', { key:text('key').primaryKey(), value:text('value').notNull() });
 export const rateLimits = sqliteTable('rate_limits', { key:text('key').primaryKey(), count:integer('count').notNull().default(1), expires:integer('expires').notNull() });
 export const enquiryConversions = sqliteTable('enquiry_conversions', { enquiryId:text('enquiry_id').primaryKey().references(()=>enquiries.id), studentId:text('student_id').notNull().unique().references(()=>students.id) });
+
+export const galleryAlbums = sqliteTable('gallery_albums', {
+ id:id(), title:text('title').notNull(), caption:text('caption').notNull().default(''),
+ category:text('category').notNull().default('Training'), eventDate:text('event_date').notNull().default(''),
+ status:text('status').notNull().default('Draft'), sortOrder:integer('sort_order').notNull().default(0),
+ permissionConfirmed:integer('permission_confirmed').notNull().default(0), permissionReference:text('permission_reference').notNull().default(''),
+ createdBy:text('created_by').notNull().references(()=>users.id), createdAt:created(), updatedAt:text('updated_at').notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+},t=>[
+ check('gallery_album_status',sql`${t.status} IN ('Draft','Published','Archived')`),
+ check('gallery_album_permission',sql`${t.permissionConfirmed} IN (0,1) AND (${t.status} != 'Published' OR ${t.permissionConfirmed} = 1)`),
+ check('gallery_album_order',sql`${t.sortOrder} >= 0`), index('gallery_album_public_order').on(t.status,t.sortOrder),
+]);
+export const galleryPhotos = sqliteTable('gallery_photos', {
+ id:id(), albumId:text('album_id').notNull().references(()=>galleryAlbums.id), objectKey:text('object_key').notNull().unique(),
+ altText:text('alt_text').notNull(), caption:text('caption').notNull().default(''),
+ width:integer('width').notNull(), height:integer('height').notNull(), byteSize:integer('byte_size').notNull(), sha256:text('sha256').notNull(),
+ sortOrder:integer('sort_order').notNull().default(0), isCover:integer('is_cover').notNull().default(0), archived:integer('archived').notNull().default(0), createdAt:created(),
+},t=>[
+ uniqueIndex('gallery_photo_content').on(t.albumId,t.sha256),
+ uniqueIndex('gallery_album_cover').on(t.albumId).where(sql`${t.isCover} = 1 AND ${t.archived} = 0`),
+ index('gallery_photo_order').on(t.albumId,t.archived,t.sortOrder),
+ check('gallery_photo_values',sql`${t.width} > 0 AND ${t.height} > 0 AND ${t.byteSize} > 0 AND ${t.byteSize} <= 2097152 AND ${t.sortOrder} >= 0 AND ${t.isCover} IN (0,1) AND ${t.archived} IN (0,1)`),
+]);

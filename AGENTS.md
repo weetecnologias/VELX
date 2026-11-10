@@ -34,6 +34,9 @@ requires a different approach; do not assume PostgreSQL or Supabase is configure
 | `app/chatgpt-auth.ts` | Sites authentication integration |
 | `lib/password-recovery.ts`, `lib/recovery-policy.mjs` | Recovery-only provider adapter, validation and rate limits |
 | `components/password-recovery.tsx` | Forgot-password and reset-password forms |
+| `lib/gallery.ts`, `lib/gallery-policy.ts` | Gallery permissions, publishing, upload validation and limits |
+| `components/gallery-manager.tsx`, `components/gallery.tsx` | Admin album management and public gallery/viewer |
+| `lib/gallery-upload.ts` | Browser photo resizing and conversion before upload |
 | `db/schema.ts`, `drizzle/` | Database definitions and versioned SQL migrations |
 | `components/excel-import.tsx` | Workbook parsing, column mapping, preview and Excel export |
 | `components/receipt.tsx`, `app/receipt/[id]/page.tsx` | Protected printable receipts |
@@ -176,8 +179,14 @@ Use `public/velx-logo.png` without distorting or replacing the supplied logo.
 `public/training-hero.png` is generated concept imagery and must remain labelled
 as illustrative. See `docs/ASSETS.md` for provenance. Publish actual coach profiles,
 schedules, claims or academy photographs only from supplied/verified information
-and appropriate permissions. Never publish student photos or private records on
-public pages.
+and appropriate permissions. Never publish private student profile photos or
+records. Public Gallery media must be separately uploaded by an administrator;
+publishing requires saved permission confirmation and at least one available photo.
+See `docs/GALLERY.md`. Draft/archived gallery objects and permission references are
+administrator-only. Public image reads must check the current album publication
+state, including after unpublishing. Keep gallery objects under `gallery/`, separate
+from `students/`, and preserve the bounded upload reader, metadata stripping,
+draft-only editing, database guards and recoverable removal/archive workflows.
 
 Known contact details: Masjid Banda, Kondapur, Hyderabad, Telangana 500084;
 8179190909. Use IST (`Asia/Kolkata`) for schedules and user-facing academy dates.
