@@ -6,8 +6,9 @@ The implementation prioritises Phase 1: enquiries and conversion, admissions, Ex
 
 See [Setup and deployment](docs/DEPLOYMENT.md), [Admin guide](docs/ADMIN_GUIDE.md) and [Asset provenance](docs/ASSETS.md).
 
-Use a separate `codex/<short-topic>` branch for each change. Tested work integrates
-into `develop`; `main` is reserved for releases. See [Git workflow](docs/GIT_WORKFLOW.md)
+Use a separate `feature/`, `fix/`, `docs/`, `chore/` or `hotfix/` branch for each
+change. Tested work integrates into `develop`; `main` is reserved for releases.
+See [Git workflow](docs/GIT_WORKFLOW.md)
 for commits, reviews and the later development/production hosting setup.
 
 Forgot-password and reset-password pages are included. Local testing captures

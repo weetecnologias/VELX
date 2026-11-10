@@ -10,12 +10,20 @@ application, deployment archives or runtime data to that parent repository.
 | --- | --- | --- |
 | `main` | Production release baseline | Production, once deployment is connected |
 | `develop` | Integration of tested changes | Local testing now; hosted development/staging later |
-| `codex/<short-topic>` | One feature, fix or documentation task | Local testing or a future isolated preview |
+| `feature/<topic>` | New functionality | Local testing or a future isolated preview |
+| `fix/<topic>` | Bug fix | Local testing or a future isolated preview |
+| `docs/<topic>` | Documentation | Documentation review |
+| `chore/<topic>` | Dependencies, tooling or maintenance | Local checks or a future isolated preview |
+| `hotfix/<topic>` | Urgent production fix, based on `main` | Verify before a production release |
 
 Every new logical change starts on its own branch before editing. Several related
 files and commits can belong to one change. Commit related operator documentation
 and update `AGENTS.md` when the architecture, commands or contributor rules change;
 it is not a generated change log and does not update itself.
+
+Use lowercase topics with hyphens, such as `feature/fee-discounts`,
+`fix/student-admission-status` or `docs/branch-naming`. These prefixes replace the
+earlier `codex/` convention for new work. Historical branches retain their names.
 
 At initial setup on 10 November 2026, `main` was retained at `011b6b4`, the
 previously published source baseline. The previously uncommitted local login and
@@ -33,7 +41,7 @@ added separately on `codex/git-branch-workflow`. Earlier history is preserved.
 
    ```powershell
    git switch develop
-   git switch -c codex/fee-plan-discount
+   git switch -c feature/fee-plan-discount
    ```
 
 3. Implement only the task and its related documentation. Review `git diff` and
@@ -43,7 +51,7 @@ added separately on `codex/git-branch-workflow`. Earlier history is preserved.
    `npm run typecheck`, `npm test` and `npm run build`. Documentation-only changes
    need content/link review and `git diff --check`.
 5. Commit with a descriptive message. Compare the feature with its base using
-   `git diff develop...codex/fee-plan-discount` and inspect `git log --oneline`.
+   `git diff develop...feature/fee-plan-discount` and inspect `git log --oneline`.
 6. With GitHub connected, push the feature branch and open a pull request into
    `develop`. Require successful checks before merging. Use a merge commit so
    the branch's grouped history remains visible. Before a remote exists, a
@@ -59,14 +67,14 @@ use a follow-up fix or a reviewed revert.
 The normal flow is:
 
 ```text
-codex/<change> -> pull request -> develop -> test -> release pull request -> main
+feature/<change> -> pull request -> develop -> test -> release pull request -> main
 ```
 
 `develop` should deploy to a development/staging environment when hosting is
 configured. Test there before promoting the same tested code to `main` for a
 production release. Record a release version/tag and the deployed commit so a
 deployment can be traced to its source. For an urgent production fix, branch from
-`main` as `codex/hotfix-<topic>`, verify it, merge through the release process and
+`main` as `hotfix/<topic>`, verify it, merge through the release process and
 merge the resulting production history back into `develop`.
 
 The environments need separate D1 databases, R2 buckets, authentication projects
