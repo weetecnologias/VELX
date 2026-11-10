@@ -8,6 +8,12 @@ The deployed review URL is expected at `https://velx-taekwondo-academy.amulya-bh
 
 ## Required configuration
 
+Optional password recovery configuration is described in
+[Password recovery](PASSWORD_RECOVERY.md). It requires a configured Supabase Auth
+project, custom SMTP, a recovery-specific email template and trusted HTTPS URLs.
+It does not replace the current Sites sign-in; independent login and hosting are
+still later tasks. Local test mode provides a separate captured-email workflow.
+
 * `BOOTSTRAP_ADMIN_EMAIL` (secret): exact email of the authorised first Super Admin. It has already been configured for the current Site owner. Do not commit its value. The bootstrap checks authenticated email and requires no existing Super Admin.
 * `DB`: D1 binding, provisioned by Sites from the manifest.
 * `BUCKET`: R2 binding, provisioned by Sites for student photos.
@@ -26,7 +32,7 @@ node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1
 npm run dev -- --port 5173
 ```
 
-Run migration files once in order. They create schema only. `POST /api/setup`, restricted to Super Admins, creates the initial programme/belt reference dataset. Local and hosted databases are separate. Local preview has no simulated login: it shows public pages and the real sign-in entry point, which requires Sites hosting for the actual authentication flow. Automated service tests use isolated SQLite databases and injected fixture identities; those identities are not app accounts and cannot sign in to the hosted portal.
+Run migration files once in order. They create schema only. `POST /api/setup`, restricted to Super Admins, creates the initial programme/belt reference dataset. Local and hosted databases are separate. Normal local preview shows public pages and the hosted sign-in entry point. For password-checked dummy accounts, run `npm run dev:test`; see [Local testing](LOCAL_TESTING.md). That explicitly enabled development mode uses a separate local D1/R2 state directory and is excluded from production. Automated service tests use isolated SQLite databases and fixture identities that cannot sign in to the hosted portal.
 
 ## Validation
 
