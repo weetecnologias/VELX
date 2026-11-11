@@ -10,6 +10,10 @@ The implementation prioritises Phase 1: enquiries and conversion, admissions, Ex
 
 See [Setup and deployment](docs/DEPLOYMENT.md), [Admin guide](docs/ADMIN_GUIDE.md) and [Asset provenance](docs/ASSETS.md).
 
+Admin and Super Admin accounts can manage public photo albums through **Gallery**.
+Draft previews, cover selection, captions, ordering, publishing and recoverable
+archiving are documented in the [Gallery guide](docs/GALLERY.md).
+
 Use a separate `feature/`, `fix/`, `docs/`, `chore/` or `hotfix/` branch for each
 change. Tested work integrates into `develop`; `main` is reserved for releases.
 See [Git workflow](docs/GIT_WORKFLOW.md)
