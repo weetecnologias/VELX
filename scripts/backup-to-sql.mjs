@@ -4,6 +4,14 @@ const data=JSON.parse(readFileSync(input,'utf8'));if(data.version!==1)throw Erro
 const tables=['users','profiles','programmes','coaches','parents','fee_plans','belt_levels','batches','students','student_private','parent_student_links','batch_enrollments','enquiries','enquiry_conversions','enquiry_followups','attendance','invoices','payments','receipts','expenses','belt_exams','belt_results','progress','announcements','notifications','settings','audit_logs'];
 const cell=v=>v===null?'NULL':typeof v==='number'&&Number.isFinite(v)?String(v):"'"+String(v).replaceAll("'","''")+"'";
 const sql=['-- Restore only into a new empty database with matching migrations. Never overwrite live data.','PRAGMA foreign_keys=ON;'];
-for(const name of tables)for(const row of data[name]??[]){const keys=Object.keys(row);if(keys.some(k=>!/^[a-z_]+$/.test(k)))throw Error('Invalid backup column');sql.push(`INSERT INTO "${name}" (${keys.map(k=>'"'+k+'"').join(',')}) VALUES (${keys.map(k=>cell(row[k])).join(',')});`);}
+for(const name of tables)for(const row of data[name]??[]){const keys=Object.keys(row);if(keys.some(k=>!/^[a-z_][a-z0-9_]*$/.test(k)))throw Error('Invalid backup column');sql.push(`INSERT INTO "${name}" (${keys.map(k=>'"'+k+'"').join(',')}) VALUES (${keys.map(k=>cell(row[k])).join(',')});`);}
+// Restore album photos while their parent is a draft, then restore visibility.
+// Archived albums come first so they do not consume the active-album allowance.
+const append=(name,row)=>{const keys=Object.keys(row);if(keys.some(k=>!/^[a-z_][a-z0-9_]*$/.test(k)))throw Error('Invalid backup column');sql.push(`INSERT INTO "${name}" (${keys.map(k=>'"'+k+'"').join(',')}) VALUES (${keys.map(k=>cell(row[k])).join(',')});`);};
+for(const album of [...(data.gallery_albums??[])].sort((a,b)=>Number(b.status==='Archived')-Number(a.status==='Archived'))){
+ append('gallery_albums',{...album,status:'Draft'});
+ for(const photo of data.gallery_photos??[])if(photo.album_id===album.id)append('gallery_photos',photo);
+ if(album.status!=='Draft')sql.push(`UPDATE gallery_albums SET status=${cell(album.status)} WHERE id=${cell(album.id)};`);
+}
 writeFileSync(output,sql.join('\n')+'\n',{flag:'wx'});console.log('Restore SQL created. Keep this sensitive file private.');
 

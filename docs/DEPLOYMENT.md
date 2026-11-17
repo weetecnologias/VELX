@@ -43,6 +43,7 @@ npm run build
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_amazing_jean_grey.sql
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_integrity.sql
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0002_cool_wolf_cub.sql
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0003_public_gallery.sql
 npm run dev -- --port 5173
 ```
 
@@ -69,6 +70,21 @@ npm run build
 For a custom domain, confirm support in the hosting account. Do not point a domain at a guessed upstream Worker address.
 
 ## Storage, reliability and limits
+
+Public Gallery uses the existing `DB` and private `BUCKET` bindings; no new
+service key is required. Apply `0003_public_gallery.sql` before serving the new
+gallery endpoints. It adds album/photo tables, publication checks, draft-only
+editing and album/photo limits. It does not seed any real or sample gallery
+content. `npm run dev:test` applies pending migrations to its isolated local
+database; an already-running preview needs the pending local migration applied.
+
+Gallery files are stored under `gallery/` and served only through state-checked
+API endpoints. Keep the R2 bucket private. Do not expose draft photos through a
+public bucket URL or CDN rule that bypasses publication checks. Photo responses
+use `no-store` so later requests observe unpublishing. Logical JSON backups include
+gallery metadata and object keys; back up/restore the R2 objects separately.
+`scripts/backup-to-sql.mjs` restores photos while their albums are drafts, then
+restores the saved publication/archive states. See [Gallery](GALLERY.md).
 
 All fees are integer paise. Related admission and payment writes use D1 atomic batches. Triggers prevent overpayments, out-of-capacity enrolment and changes to confirmed payments/audit entries. Validation runs on the server with Zod. Public writes are rate limited in D1; JSON writes reject foreign origins. Requests are served over hosted HTTPS. Private API responses are uncached. SQL is parameterised; student records and private photos are never in public endpoints.
 

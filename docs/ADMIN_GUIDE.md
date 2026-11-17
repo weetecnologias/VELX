@@ -8,7 +8,23 @@ available by scrolling, and the mobile menu closes after a selection. Old links
 such as `/about` redirect to `/#about`. Admission enquiries, enquiry tracking,
 privacy and the academy portal retain their dedicated routes or controls.
 
-## First use
+## Public Gallery management
+
+Admin and Super Admin accounts have **Gallery** in their portal menu. Create an
+album, enter its title/category/event date/caption, then upload up to 10 photos at
+a time. Add useful image descriptions and photo captions, choose the cover and
+use the arrow controls to arrange photos. Display order controls album ordering.
+Use **Preview** to inspect the draft. Save the publication permission confirmation
+before choosing **Publish album**. The public gallery updates when refreshed;
+no source edit or deployment is needed for new content.
+
+Published albums must be unpublished before editing. Removed photos can be
+restored from **Removed photos**. Archived albums are hidden and can be restored
+as drafts. These actions retain the files for recovery. Student profile photos
+are separate private records and are never automatically added to Gallery.
+See [Gallery guide](GALLERY.md) for limits, storage and backup details.
+
+## First-use setup
 
 Open `/portal` on the deployed site and sign in with the Site owner's authorised email. The bootstrap email is stored as the `BOOTSTRAP_ADMIN_EMAIL` secret in Sites. Only that authenticated identity can create the first Super Admin. Unknown accounts have no academy access.
 

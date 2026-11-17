@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { enquirySchema, studentSchema, batchSchema, invoiceSchema, paymentSchema, roles, stages, day, csv } from './validation';
+import {gallery} from './gallery';
 
 type Row = Record<string, any>;
 export type Identity = { id:string; email:string; name:string };
@@ -27,8 +28,9 @@ export async function academy(request:Request,options:Options):Promise<Response>
    const origin=request.headers.get('origin');
    if(origin && origin!==url.origin)fail(403,'Cross-origin requests are not accepted');
    if(request.headers.get('sec-fetch-site')==='cross-site')fail(403,'Cross-site requests are not accepted');
-   if(!request.headers.get('content-type')?.includes('application/json'))fail(415,'Send application/json');
+   if(!request.headers.get('content-type')?.includes('application/json')&&!(route==='gallery/upload'&&request.headers.get('content-type')==='image/jpeg'))fail(415,'Send application/json or use the Gallery photo picker');
   }
+  const publicGallery=await gallery(request,{db,bucket});if(publicGallery)return publicGallery;
   if(route==='public' && request.method==='GET')return json({
    programmes:await all('SELECT * FROM programmes WHERE active=1'),
    batches:await all('SELECT b.id,b.name,b.days,b.start_time,b.end_time,b.capacity,p.name programme,c.name coach FROM batches b JOIN programmes p ON p.id=b.programme_id LEFT JOIN coaches c ON c.id=b.coach_id WHERE b.active=1'),
@@ -63,6 +65,7 @@ export async function academy(request:Request,options:Options):Promise<Response>
   }
   if(!user)fail(403,'Your account has no academy access. Ask an academy administrator to add your sign-in email.');
   const u=user!;
+  if(route.startsWith('gallery/'))return (await gallery(request,{db,bucket,user:{id:u.id,role:u.role}}))!;
   const admin=()=>{if(!isAdmin(u))fail(403,'Administrator access required');};
   const superAdmin=()=>{if(u.role!=='Super Admin')fail(403,'Super Admin access required');};
   // Every student-derived query uses the same server-side ownership/assignment scope.
@@ -185,7 +188,7 @@ export async function academy(request:Request,options:Options):Promise<Response>
    if(!queries[table])fail(400,'Unknown report');await audit(u,'report.exported',table).run();return new Response('\uFEFF'+csv(await all(queries[table])),{headers:{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':`attachment; filename="velx-${table}.csv"`,'Cache-Control':'no-store'}});
   }
   if(route==='backup' && request.method==='GET'){
-   superAdmin();const names=['users','profiles','programmes','coaches','parents','fee_plans','batches','belt_levels','students','student_private','parent_student_links','batch_enrollments','enquiries','enquiry_conversions','enquiry_followups','attendance','invoices','payments','receipts','expenses','belt_exams','belt_results','progress','announcements','notifications','settings','audit_logs'];const backup:Row={version:1,exported_at:new Date().toISOString(),currency:'INR',amount_unit:'paise'};for(const name of names)backup[name]=await all(`SELECT * FROM ${name}`);await audit(u,'backup.exported','academy').run();return new Response(JSON.stringify(backup,null,2),{headers:{'Content-Type':'application/json','Content-Disposition':'attachment; filename="velx-backup.json"','Cache-Control':'no-store'}});
+   superAdmin();const names=['users','profiles','programmes','coaches','parents','fee_plans','batches','belt_levels','students','student_private','parent_student_links','batch_enrollments','enquiries','enquiry_conversions','enquiry_followups','attendance','invoices','payments','receipts','expenses','belt_exams','belt_results','progress','announcements','notifications','settings','gallery_albums','gallery_photos','audit_logs'];const backup:Row={version:1,exported_at:new Date().toISOString(),currency:'INR',amount_unit:'paise'};for(const name of names)backup[name]=await all(`SELECT * FROM ${name}`);await audit(u,'backup.exported','academy').run();return new Response(JSON.stringify(backup,null,2),{headers:{'Content-Type':'application/json','Content-Disposition':'attachment; filename="velx-backup.json"','Cache-Control':'no-store'}});
   }
   if(route==='photo' && request.method==='GET'){
    const id=url.searchParams.get('id')??'';await permitted(id);const s=await first('SELECT photo_key FROM students WHERE id=?',id);if(!s?.photo_key||!bucket)fail(404,'Photo not found');const object=await bucket!.get(s!.photo_key);if(!object)fail(404,'Photo not found');return new Response(object!.body,{headers:{'Content-Type':object!.httpMetadata?.contentType??'image/jpeg','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
