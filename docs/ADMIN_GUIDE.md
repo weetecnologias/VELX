@@ -1,5 +1,11 @@
 # VELX academy administrator guide
 
+## Portal navigation
+
+All signed-in roles use their permitted workspace modules and the **Sign out**
+action. The desktop sidebar and mobile portal menu omit the **View public website**
+shortcut. The public website remains available at the academy's main URL.
+
 ## Public website navigation
 
 The public menu scrolls to sections of the full homepage: About, Programmes,

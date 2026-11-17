@@ -169,6 +169,10 @@ neutral backgrounds. Preserve responsive layouts, keyboard access, visible focus
 form labels, validation feedback, loading/error states and print styles. Every
 interactive control must perform a real supported action.
 
+The shared signed-in portal sidebar must omit the generic **View public website**
+shortcut for every role, on desktop and mobile. Keep role-specific navigation and
+the Sign out action in that sidebar.
+
 Public marketing navigation uses homepage anchors (`/#about`, `/#programmes`,
 `/#timetable`, `/#coaches`, `/#gallery`, `/#faqs`, `/#contact`). Keep all targets on
 the full homepage and close the mobile menu on selection. Legacy section URLs
